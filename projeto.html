@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Central do Tédio</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, sans-serif;
+}
+
+body{
+    background:#080812;
+    color:white;
+    min-height:100vh;
+    overflow-x:hidden;
+}
+
+body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    background:
+        radial-gradient(circle at 20% 20%,#34206b55,transparent 30%),
+        radial-gradient(circle at 80% 80%,#0066ff33,transparent 30%);
+    z-index:-1;
+}
+
+header{
+    padding:25px 7%;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    border-bottom:1px solid #ffffff12;
+    backdrop-filter:blur(10px);
+    position:sticky;
+    top:0;
+    z-index:10;
+    background:#080812cc;
+}
+
+.logo{
+    font-size:25px;
+    font-weight:bold;
+}
+
+.logo span{
+    color:#7c5cff;
+}
+
+.stats{
+    display:flex;
+    gap:20px;
+}
+
+.stat{
+    background:#ffffff0d;
+    padding:10px 16px;
+    border-radius:12px;
+    border:1px solid #ffffff12;
+}
+
+.stat b{
+    color:#8d76ff;
+}
+
+main{
+    width:90%;
+    max-width:1200px;
+    margin:auto;
+    padding:45px 0;
+}
+
+.hero{
+    text-align:center;
+    margin-bottom:40px;
+}
+
+.hero h1{
+    font-size:clamp(40px,7vw,75px);
+    margin-bottom:12px;
+}
+
+.hero h1 span{
+    color:#7c5cff;
+}
+
+.hero p{
+    color:#999;
+    font-size:18px;
+}
+
+.tabs{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-bottom:25px;
+}
+
+.tab{
+    background:#ffffff0d;
+    color:white;
+    border:1px solid #ffffff15;
+    padding:12px 18px;
+    border-radius:10px;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.tab:hover,
+.tab.active{
+    background:#7c5cff;
+}
+
+.game{
+    display:none;
+    background:#ffffff08;
+    border:1px solid #ffffff12;
+    border-radius:25px;
+    padding:35px;
+    min-height:430px;
+    box-shadow:0 20px 80px #0005;
+}
+
+.game.active{
+    display:block;
+}
+
+.game h2{
+    font-size:32px;
+    margin-bottom:10px;
+}
+
+.description{
+    color:#999;
+    margin-bottom:30px;
+}
+
+/* CLICKER */
+
+.click-area{
+    text-align:center;
+}
+
+.big-button{
+    width:190px;
+    height:190px;
+    border-radius:50%;
+    border:none;
+    background:linear-gradient(145deg,#8e75ff,#5135d9);
+    color:white;
+    font-size:30px;
+    font-weight:bold;
+    cursor:pointer;
+    box-shadow:0 0 50px #6d51ff66;
+    transition:.1s;
+}
+
+.big-button:active{
+    transform:scale(.92);
+}
+
+.click-score{
+    font-size:35px;
+    margin:25px;
+}
+
+.shop{
+    margin-top:30px;
+    display:flex;
+    gap:12px;
+    justify-content:center;
+    flex-wrap:wrap;
+}
+
+.shop button{
+    padding:12px 18px;
+    background:#ffffff0d;
+    border:1px solid #ffffff15;
+    color:white;
+    border-radius:10px;
+    cursor:pointer;
+}
+
+.shop button:hover{
+    background:#ffffff18;
+}
+
+/* REAÇÃO */
+
+.reaction-box{
+    height:230px;
+    border-radius:20px;
+    background:#222;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    font-size:28px;
+    font-weight:bold;
+    cursor:pointer;
+    user-select:none;
+}
+
+.reaction-box.wait{
+    background:#9b2226;
+}
+
+.reaction-box.go{
+    background:#2a9d5b;
+}
+
+/* NÚMERO */
+
+input{
+    width:100%;
+    max-width:400px;
+    padding:15px;
+    background:#ffffff0b;
+    border:1px solid #ffffff18;
+    border-radius:10px;
+    color:white;
+    font-size:18px;
+    outline:none;
+}
+
+input:focus{
+    border-color:#7c5cff;
+}
+
+.action{
+    padding:15px 22px;
+    border:none;
+    border-radius:10px;
+    background:#7c5cff;
+    color:white;
+    font-weight:bold;
+    cursor:pointer;
+    margin-top:12px;
+}
+
+.result{
+    margin-top:20px;
+    font-size:20px;
+    color:#b8aaff;
+}
+
+/* DADO */
+
+.dice{
+    font-size:130px;
+    text-align:center;
+    margin:20px;
+}
+
+.center{
+    text-align:center;
+}
+
+/* FRASE */
+
+.quote{
+    font-size:30px;
+    line-height:1.4;
+    max-width:750px;
+    margin:50px auto;
+    text-align:center;
+}
+
+.author{
+    text-align:center;
+    color:#777;
+}
+
+/* COIN */
+
+.coin{
+    width:150px;
+    height:150px;
+    border-radius:50%;
+    margin:35px auto;
+    background:linear-gradient(145deg,#ffd84d,#bd8c00);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:#533b00;
+    font-size:35px;
+    font-weight:bold;
+    box-shadow:0 10px 30px #0008;
+}
+
+.flip{
+    animation:flip .7s;
+}
+
+@keyframes flip{
+    0%{transform:rotateY(0)}
+    50%{transform:rotateY(180deg)}
+    100%{transform:rotateY(360deg)}
+}
+
+/* FOOTER */
+
+footer{
+    text-align:center;
+    padding:40px;
+    color:#555;
+}
+
+/* RESPONSIVO */
+
+@media(max-width:600px){
+
+    header{
+        flex-direction:column;
+        gap:15px;
+    }
+
+    .stats{
+        width:100%;
+        justify-content:center;
+    }
+
+    .game{
+        padding:22px;
+    }
+
+    .big-button{
+        width:150px;
+        height:150px;
+    }
+
+}
+</style>
+</head>
+
+<body>
+
+<header>
+
+    <div class="logo">
+        Central<span>DoTédio</span>
+    </div>
+
+    <div class="stats">
+        <div class="stat">
+            ⭐ XP: <b id="xp">0</b>
+        </div>
+
+        <div class="stat">
+            🏆 Nível: <b id="level">1</b>
+        </div>
+    </div>
+
+</header>
+
+
+<main>
+
+    <div class="hero">
+
+        <h1>Tá sem fazer <span>nada?</span></h1>
+
+        <p>
+            Então fica aqui. Você provavelmente não tem coisa melhor pra fazer.
+        </p>
+
+    </div>
+
+
+    <div class="tabs">
+
+        <button class="tab active" data-game="clicker">
+            🖱️ Clicker
+        </button>
+
+        <button class="tab" data-game="reaction">
+            ⚡ Reflexo
+        </button>
+
+        <button class="tab" data-game="number">
+            🔢 Número
+        </button>
+
+        <button class="tab" data-game="dice">
+            🎲 Dado
+        </button>
+
+        <button class="tab" data-game="coin">
+            🪙 Moeda
+        </button>
+
+        <button class="tab" data-game="quote">
+            🧠 Frases
+        </button>
+
+    </div>
+
+
+    <!-- CLICKER -->
+
+    <section class="game active" id="clicker">
+
+        <h2>🖱️ O botão inútil</h2>
+
+        <p class="description">
+            Clique nele. Não serve pra absolutamente nada.
+            Ou talvez sirva...
+        </p>
+
+        <div class="click-area">
+
+            <div class="click-score">
+                Cliques: <b id="clicks">0</b>
+            </div>
+
+            <button class="big-button" id="clickButton">
+                CLIQUE
+            </button>
+
+            <div class="shop">
+
+                <button id="upgrade">
+                    ⚡ Upgrade (+1) — 50 cliques
+                </button>
+
+                <button id="autoUpgrade">
+                    🤖 Auto Click — 200 cliques
+                </button>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- REFLEXO -->
+
+    <section class="game" id="reaction">
+
+        <h2>⚡ Teste de Reflexo</h2>
+
+        <p class="description">
+            Clique na área e espere ela ficar verde. Depois clique o mais rápido possível.
+        </p>
+
+        <div class="reaction-box" id="reactionBox">
+            Clique para começar
+        </div>
+
+        <div class="result" id="reactionResult">
+            Seu melhor tempo aparecerá aqui.
+        </div>
+
+    </section>
+
+
+    <!-- NÚMERO -->
+
+    <section class="game" id="number">
+
+        <h2>🔢 Número Secreto</h2>
+
+        <p class="description">
+            Estou pensando em um número entre 1 e 100.
+        </p>
+
+        <input
+            type="number"
+            id="guess"
+            min="1"
+            max="100"
+            placeholder="Digite seu palpite..."
+        >
+
+        <br>
+
+        <button class="action" id="guessButton">
+            Tentar
+        </button>
+
+        <div class="result" id="guessResult">
+            Boa sorte.
+        </div>
+
+    </section>
+
+
+    <!-- DADO -->
+
+    <section class="game" id="dice">
+
+        <h2>🎲 Dado Virtual</h2>
+
+        <p class="description">
+            Jogue um dado de seis lados.
+        </p>
+
+        <div class="dice" id="diceDisplay">
+            🎲
+        </div>
+
+        <div class="center">
+
+            <button class="action" id="rollDice">
+                ROLAR DADO
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- MOEDA -->
+
+    <section class="game" id="coin">
+
+        <h2>🪙 Cara ou Coroa</h2>
+
+        <p class="description">
+            Faça sua escolha e veja se a sorte está do seu lado.
+        </p>
+
+        <div class="coin" id="coinDisplay">
+            ?
+        </div>
+
+        <div class="center">
+
+            <button class="action" id="heads">
+                CARA
+            </button>
+
+            <button class="action" id="tails">
+                COROA
+            </button>
+
+        </div>
+
+        <div class="result center" id="coinResult"></div>
+
+    </section>
+
+
+    <!-- FRASES -->
+
+    <section class="game" id="quote">
+
+        <h2>🧠 Máquina de frases aleatórias</h2>
+
+        <p class="description">
+            Clique e descubra alguma frase completamente aleatória.
+        </p>
+
+        <div class="quote" id="quoteText">
+            "Clique no botão. Eu sei que você quer."
+        </div>
+
+        <div class="author" id="quoteAuthor">
+            — Máquina do Tédio
+        </div>
+
+        <div class="center">
+
+            <button class="action" id="newQuote">
+                NOVA FRASE
+            </button>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<footer>
+    Central do Tédio © 2026 — Você poderia estar fazendo outra coisa.
+</footer>
+
+
+<script>
+
+/* =========================
+   SISTEMA DE XP
+========================= */
+
+let xp = 0;
+let level = 1;
+
+function addXP(amount){
+
+    xp += amount;
+
+    level = Math.floor(xp / 100) + 1;
+
+    document.getElementById("xp").textContent = xp;
+    document.getElementById("level").textContent = level;
+}
+
+
+/* =========================
+   SISTEMA DE ABAS
+========================= */
+
+const tabs = document.querySelectorAll(".tab");
+const games = document.querySelectorAll(".game");
+
+tabs.forEach(tab => {
+
+    tab.addEventListener("click", () => {
+
+        tabs.forEach(t => t.classList.remove("active"));
+
+        games.forEach(g => g.classList.remove("active"));
+
+        tab.classList.add("active");
+
+        document
+            .getElementById(tab.dataset.game)
+            .classList.add("active");
+
+    });
+
+});
+
+
+/* =========================
+   CLICKER
+========================= */
+
+let clicks = 0;
+let clickPower = 1;
+let autoClick = false;
+
+const clickButton =
+    document.getElementById("clickButton");
+
+const clicksDisplay =
+    document.getElementById("clicks");
+
+clickButton.addEventListener("click", () => {
+
+    clicks += clickPower;
+
+    clicksDisplay.textContent = clicks;
+
+    addXP(1);
+
+});
+
+
+document
+    .getElementById("upgrade")
+    .addEventListener("click", () => {
+
+        if(clicks >= 50){
+
+            clicks -= 50;
+            clickPower++;
+
+            clicksDisplay.textContent = clicks;
+
+            alert(
+                "⚡ Upgrade comprado! Agora cada clique vale "
+                + clickPower
+            );
+
+        }else{
+
+            alert("Você precisa de 50 cliques.");
+
+        }
+
+    });
+
+
+document
+    .getElementById("autoUpgrade")
+    .addEventListener("click", () => {
+
+        if(clicks >= 200 && !autoClick){
+
+            clicks -= 200;
+
+            autoClick = true;
+
+            clicksDisplay.textContent = clicks;
+
+            alert("🤖 Auto Click ativado!");
+
+            setInterval(() => {
+
+                clicks += clickPower;
+
+                clicksDisplay.textContent = clicks;
+
+            },1000);
+
+        }else if(autoClick){
+
+            alert("Você já possui o Auto Click.");
+
+        }else{
+
+            alert("Você precisa de 200 cliques.");
+
+        }
+
+    });
+
+
+/* =========================
+   REFLEXO
+========================= */
+
+const reactionBox =
+    document.getElementById("reactionBox");
+
+const reactionResult =
+    document.getElementById("reactionResult");
+
+let reactionStart = 0;
+let reactionTimer = null;
+let reactionRunning = false;
+
+reactionBox.addEventListener("click", () => {
+
+    if(!reactionRunning){
+
+        reactionBox.classList.remove("go");
+        reactionBox.classList.add("wait");
+
+        reactionBox.textContent =
+            "ESPERE...";
+
+        reactionRunning = true;
+
+        const delay =
+            Math.floor(Math.random()*4000)+2000;
+
+        reactionTimer = setTimeout(() => {
+
+            reactionBox.classList.remove("wait");
+            reactionBox.classList.add("go");
+
+            reactionBox.textContent =
+                "CLIQUE AGORA!";
+
+            reactionStart = performance.now();
+
+        },delay);
+
+    }else{
+
+        if(reactionStart === 0){
+
+            clearTimeout(reactionTimer);
+
+            reactionBox.classList.remove("wait");
+
+            reactionBox.textContent =
+                "Cedo demais 😂";
+
+            reactionRunning = false;
+
+            return;
+
+        }
+
+        const time =
+            Math.round(performance.now()-reactionStart);
+
+        reactionResult.textContent =
+            "⚡ Seu tempo: " + time + " ms";
+
+        addXP(Math.max(5,Math.floor(1000/time*10)));
+
+        reactionBox.classList.remove("go");
+
+        reactionBox.textContent =
+            "Clique para tentar novamente";
+
+        reactionStart = 0;
+        reactionRunning = false;
+
+    }
+
+});
+
+
+/* =========================
+   NÚMERO SECRETO
+========================= */
+
+let secret =
+    Math.floor(Math.random()*100)+1;
+
+let attempts = 0;
+
+document
+    .getElementById("guessButton")
+    .addEventListener("click", () => {
+
+        const input =
+            document.getElementById("guess");
+
+        const result =
+            document.getElementById("guessResult");
+
+        const guess =
+            Number(input.value);
+
+        if(guess < 1 || guess > 100){
+
+            result.textContent =
+                "Digite um número entre 1 e 100.";
+
+            return;
+
+        }
+
+        attempts++;
+
+        if(guess === secret){
+
+            result.textContent =
+                "🎉 ACERTOU! Você precisou de "
+                + attempts
+                + " tentativa(s)!";
+
+            addXP(50);
+
+            secret =
+                Math.floor(Math.random()*100)+1;
+
+            attempts = 0;
+
+        }else if(guess < secret){
+
+            result.textContent =
+                "⬆️ É maior!";
+
+        }else{
+
+            result.textContent =
+                "⬇️ É menor!";
+
+        }
+
+    });
+
+
+/* =========================
+   DADO
+========================= */
+
+const diceFaces = [
+    "⚀",
+    "⚁",
+    "⚂",
+    "⚃",
+    "⚄",
+    "⚅"
+];
+
+document
+    .getElementById("rollDice")
+    .addEventListener("click", () => {
+
+        const dice =
+            document.getElementById("diceDisplay");
+
+        let count = 0;
+
+        const animation =
+            setInterval(() => {
+
+                const random =
+                    Math.floor(Math.random()*6);
+
+                dice.textContent =
+                    diceFaces[random];
+
+                count++;
+
+                if(count >= 10){
+
+                    clearInterval(animation);
+
+                    const final =
+                        Math.floor(Math.random()*6);
+
+                    dice.textContent =
+                        diceFaces[final];
+
+                    addXP(10);
+
+                }
+
+            },80);
+
+    });
+
+
+/* =========================
+   MOEDA
+========================= */
+
+function flipCoin(){
+
+    const coin =
+        document.getElementById("coinDisplay");
+
+    const result =
+        document.getElementById("coinResult");
+
+    coin.classList.remove("flip");
+
+    void coin.offsetWidth;
+
+    coin.classList.add("flip");
+
+    const heads =
+        Math.random() < .5;
+
+    setTimeout(() => {
+
+        coin.textContent =
+            heads ? "CARA" : "COROA";
+
+        result.textContent =
+            heads
+            ? "Deu CARA! 🪙"
+            : "Deu COROA! 🪙";
+
+        addXP(5);
+
+    },350);
+
+}
+
+document
+    .getElementById("heads")
+    .addEventListener("click", flipCoin);
+
+document
+    .getElementById("tails")
+    .addEventListener("click", flipCoin);
+
+
+/* =========================
+   FRASES
+========================= */
+
+const quotes = [
+
+    [
+        "Você abriu um site só para não fazer nada.",
+        "— Máquina do Tédio"
+    ],
+
+    [
+        "Talvez o verdadeiro prêmio fossem os cliques que fizemos pelo caminho.",
+        "— Alguém na internet"
+    ],
+
+    [
+        "Se você está lendo isso, tecnicamente está fazendo alguma coisa.",
+        "— Filósofo desconhecido"
+    ],
+
+    [
+        "Clique novamente. Vai que agora acontece alguma coisa.",
+        "— Botão"
+    ],
+
+    [
+        "Parabéns. Você gastou alguns segundos da sua vida aqui.",
+        "— Central do Tédio"
+    ],
+
+    [
+        "A procrastinação também exige dedicação.",
+        "— Especialista"
+    ],
+
+    [
+        "Não sei o que você esperava encontrar aqui.",
+        "— Eu"
+    ],
+
+    [
+        "Você poderia estar estudando agora.",
+        "— Sua consciência"
+    ],
+
+    [
+        "A resposta para tudo provavelmente está em algum lugar da internet.",
+        "— Internet"
+    ]
+
+];
+
+
+document
+    .getElementById("newQuote")
+    .addEventListener("click", () => {
+
+        const index =
+            Math.floor(Math.random()*quotes.length);
+
+        document
+            .getElementById("quoteText")
+            .textContent =
+            '"' + quotes[index][0] + '"';
+
+        document
+            .getElementById("quoteAuthor")
+            .textContent =
+            quotes[index][1];
+
+        addXP(3);
+
+    });
+
+</script>
+
+</body>
+</html>
